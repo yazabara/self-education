@@ -1,0 +1,20 @@
+# common configuration for all services
+logging:
+  level:
+    ru.waveaccess.vote: debug
+    org.springframework: info
+
+spring:
+  jpa:
+    #    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${SELF_EDUCATION_DB_HOST}:${SELF_EDUCATION_DB_PORT}/${SELF_EDUCATION_DB_DATABASE}
+    username: ${SELF_EDUCATION_DB_USER}
+    password: ${SELF_EDUCATION_DB_PASSWORD}
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml

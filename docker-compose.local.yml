@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+
+  self-education-config-service:
+    environment:
+      LOCAL_IP: "${LOCAL_IP}"
+
+  self-education-calendar-service:
+    environment:
+      LOCAL_IP: "${LOCAL_IP}"

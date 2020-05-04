@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Stop all containers
+docker stop $(docker ps -a -q)
+
+# Delete all containers
+docker rm $(docker ps -a -q)
+
+# Delete all images
+docker rmi $(docker images -a -q)
+
+# Remove all
+docker system prune --volumes

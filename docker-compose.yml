@@ -1,0 +1,67 @@
+version: '3.7'
+
+services:
+
+  self-education-db:
+    image:  postgres:11.6
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: "${SELF_EDUCATION_DB_DATABASE}"
+      POSTGRES_USER: "${SELF_EDUCATION_DB_USER}"
+      POSTGRES_PASSWORD: "${SELF_EDUCATION_DB_PASSWORD}"
+    ports:
+      - "${SELF_EDUCATION_DB_PORT}:5432"
+
+  self-education-consul:
+    image: consul:1.7.2
+    environment:
+      CONSUL_BIND_INTERFACE: eth0
+    command: agent -server -bootstrap-expect=1 -ui -client=0.0.0.0 -bind=0.0.0.0
+    ports:
+      - "${CONSUL_PORT}:8500"
+    depends_on:
+      - self-education-db
+
+  self-education-config-service:
+    build:
+      context: ./config-service
+    restart: unless-stopped
+    environment:
+      CONSUL_HOST: "${CONSUL_HOST}"
+      CONSUL_PORT: "${CONSUL_PORT}"
+      CONFIG_SERVICE_PORT: "${CONFIG_SERVICE_PORT}"
+      CONFIG_SERVICE_PASS: "${CONFIG_SERVICE_PASS}"
+      CONFIG_SERVICE_USER: "${CONFIG_SERVICE_USER}"
+      WAIT_HOSTS: "${SELF_EDUCATION_DB_HOST}:${SELF_EDUCATION_DB_PORT}, ${CONSUL_HOST}:${CONSUL_PORT}"
+    ports:
+      - "${CONFIG_SERVICE_PORT}:${CONFIG_SERVICE_PORT}"
+    volumes:
+      - ./config-service/configs:/app/configs
+    depends_on:
+      - self-education-db
+      - self-education-consul
+
+  self-education-calendar-service:
+    build:
+      context: ./calendar-service
+    restart: unless-stopped
+    environment:
+      CONSUL_HOST: "${CONSUL_HOST}"
+      CONSUL_PORT: "${CONSUL_PORT}"
+      CONFIG_SERVICE_PORT: "${CONFIG_SERVICE_PORT}"
+      CONFIG_SERVICE_PASS: "${CONFIG_SERVICE_PASS}"
+      CONFIG_SERVICE_USER: "${CONFIG_SERVICE_USER}"
+      SELF_EDUCATION_DB_HOST: "${SELF_EDUCATION_DB_HOST}"
+      SELF_EDUCATION_DB_PORT: "${SELF_EDUCATION_DB_PORT}"
+      SELF_EDUCATION_DB_DATABASE: "${SELF_EDUCATION_DB_DATABASE}"
+      SELF_EDUCATION_DB_USER: "${SELF_EDUCATION_DB_USER}"
+      SELF_EDUCATION_DB_PASSWORD: "${SELF_EDUCATION_DB_PASSWORD}"
+      CALENDER_SCHEMA_NAME: "${CALENDER_SCHEMA_NAME}"
+      CALENDAR_SERVICE_PORT: "${CALENDAR_SERVICE_PORT}"
+      WAIT_HOSTS: "${SELF_EDUCATION_DB_HOST}:${SELF_EDUCATION_DB_PORT}, ${CONSUL_HOST}:${CONSUL_PORT}, ${CONFIG_SERVICE_HOST}:${CONFIG_SERVICE_PORT}"
+    ports:
+      - "${CALENDAR_SERVICE_PORT}:${CALENDAR_SERVICE_PORT}"
+    depends_on:
+      - self-education-db
+      - self-education-consul
+      - self-education-config-service

@@ -1,0 +1,16 @@
+server:
+  port: ${CONFIG_SERVICE_PORT}
+
+spring:
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: ./configs
+  security:
+    user:
+      name: ${CONFIG_SERVICE_USER}
+      password: ${CONFIG_SERVICE_PASS}
+

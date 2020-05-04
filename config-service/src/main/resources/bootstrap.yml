@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: config-service
+  cloud:
+    consul:
+      host: ${CONSUL_HOST}
+      port: ${CONSUL_PORT}
+      discovery:
+        ip-address: ${CONSUL_HOST}
+        prefer-ip-address: true

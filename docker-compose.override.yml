@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+
+  self-education-config-service:
+    build:
+      context: ./config-service
+
+  self-education-calendar-service:
+    build:
+      context: ./calendar-service

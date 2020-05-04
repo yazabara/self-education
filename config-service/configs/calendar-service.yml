@@ -1,0 +1,11 @@
+server:
+  port: ${CALENDAR_SERVICE_PORT}
+
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        default_schema: ${CALENDER_SCHEMA_NAME}
+  liquibase:
+    default-schema: ${CALENDER_SCHEMA_NAME}

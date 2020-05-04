@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: calendar-service
+  cloud:
+    consul:
+      host: ${CONSUL_HOST}
+      port: ${CONSUL_PORT}
+      discovery:
+        ip-address: ${CONSUL_HOST}
+        prefer-ip-address: true
+    config:
+      discovery:
+        enabled: true
+        service-id: config-service
+      fail-fast: true
+      username: ${CONFIG_SERVICE_USER}
+      password: ${CONFIG_SERVICE_PASS}
