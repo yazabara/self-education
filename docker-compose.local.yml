@@ -9,3 +9,8 @@ services:
   self-education-calendar-service:
     environment:
       LOCAL_IP: "${LOCAL_IP}"
+
+  self-education-routing:
+    build:
+      args:
+        CALENDAR_SERVICE_HOST: "${LOCAL_IP}"

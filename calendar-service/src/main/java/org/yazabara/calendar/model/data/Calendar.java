@@ -1,6 +1,5 @@
 package org.yazabara.calendar.model.data;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldNameConstants;

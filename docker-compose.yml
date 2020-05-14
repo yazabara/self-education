@@ -41,6 +41,20 @@ services:
       - self-education-db
       - self-education-consul
 
+  self-education-routing:
+    build:
+      context: ./routing-service
+      args:
+        CALENDAR_SERVICE_PORT: "${CALENDAR_SERVICE_PORT}"
+        CALENDAR_SERVICE_HOST: "${CALENDAR_SERVICE_HOST}"
+    ports:
+      - "${PUBLIC_API_PORT}:80"
+    restart: on-failure
+    environment:
+      PUBLIC_API_PORT: "${PUBLIC_API_PORT}"
+    depends_on:
+      - self-education-calendar-service
+
   self-education-calendar-service:
     build:
       context: ./calendar-service

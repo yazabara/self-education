@@ -23,7 +23,7 @@ public class CalendarSpecifications {
                 .and(byDescription(filter.getDescription()));
     }
 
-    public Specification<Calendar> like(String str) {
+    private Specification<Calendar> like(String str) {
         return StringUtils.isBlank(str) ? null : (root, query, cb) -> cb.like(root.get(Calendar.fields.name), str);
     }
 }
